@@ -198,15 +198,41 @@ json_data='{
   "25BCA200": "RUBY"
 }'
 
-# 1. Total students
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color
+
+# Compute stats
 total=$(echo "$json_data" | jq 'keys | length')
-
-# 2. Students with IDs starting 25BCA
 count_25BCA=$(echo "$json_data" | jq 'keys | map(select(startswith("25BCA"))) | length')
-
-# 3. Names containing lowercase letters
 lowercase_count=$(echo "$json_data" | jq '[.[] | select(test("[a-z]"))] | length')
+not_25BCA=$(echo "$json_data" | jq 'keys | map(select(startswith("25BCA") | not)) | length')
+duplicates=$(echo "$json_data" | jq -r '.[]' | sort | uniq -d)
+lower_letters=$(echo "$json_data" | jq -r '.[]' | tr -d -c 'a-z' | wc -c)
+upper_letters=$(echo "$json_data" | jq -r '.[]' | tr -d -c 'A-Z' | wc -c)
 
-echo "Total students: $total"
-echo "Students with IDs starting 25BCA: $count_25BCA"
-echo "Names containing lowercase letters: $lowercase_count"
+# Display panel
+echo -e "${MAGENTA}==============================================${NC}"
+echo -e "${CYAN}     Nightmare outside the hood by H. Mishra${NC}"
+echo -e "${MAGENTA}==============================================${NC}"
+
+echo -e "${YELLOW}Total students:${NC} ${GREEN}$total${NC}"
+echo -e "${YELLOW}Students with IDs starting 25BCA:${NC} ${GREEN}$count_25BCA${NC}"
+echo -e "${YELLOW}Students NOT starting 25BCA:${NC} ${GREEN}$not_25BCA${NC}"
+echo -e "${YELLOW}Names containing lowercase letters:${NC} ${GREEN}$lowercase_count${NC}"
+
+echo -e "${YELLOW}Duplicate names:${NC}"
+if [ -z "$duplicates" ]; then
+    echo -e "${RED}None${NC}"
+else
+    echo -e "${RED}$duplicates${NC}"
+fi
+
+echo -e "${YELLOW}Total lowercase letters in all names:${NC} ${GREEN}$lower_letters${NC}"
+echo -e "${YELLOW}Total uppercase letters in all names:${NC} ${GREEN}$upper_letters${NC}"
+
+echo -e "${MAGENTA}==============================================${NC}"
