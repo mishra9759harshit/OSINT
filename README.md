@@ -187,29 +187,3 @@ Sherlock
 
 
 ---
-
-### ✅ How to generate it in Termux automatically
-
-You can run this directly in Termux and save to `README.md`:
-
-```bash
-cat > README.md <<'EOF'
-# Paste the full markdown above here
-EOF
-
-Or even better, you can automate it inside your script nightmare_pro.sh:
-
-# inside nightmare_pro.sh after setup
-cat > README.md <<EOF
-# Nightmare Pro OSINT Toolkit
-... rest of markdown ...
-EOF
-log "README.md generated"
-
-
----
-
-I can also make a fully automated script snippet that generates the README.md with dynamic timestamps, targets, and your username, so it always stays updated whenever you run nightmare_pro.sh.
-
-Do you want me to do that?
-
